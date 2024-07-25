@@ -1,0 +1,203 @@
+###
+### Get all users
+###
+
+GET http://localhost:8000/api/v1/users/
+
+###
+### Get a user by ID
+###
+
+GET http://localhost:8000/api/v1/users/2
+
+###
+### Create a new user
+###
+
+POST http://localhost:8000/api/v1/users/
+Content-Type: application/json
+
+{
+  "first_name": "Harun",
+  "last_name": "Smith",
+  "address": "123 Main St",
+  "phone_number": "123-456-7890",
+  "email": "john.doe@example.com",
+  "hashed_password": "password123",
+  "reward_requested": "false"
+}
+
+###
+### Update an existing user
+###
+
+PUT http://localhost:8000/api/v1/users/2
+Content-Type: application/json
+
+{
+  "user_id": "2",
+  "first_name": "Jane",
+  "last_name": "Smith",
+  "address": "456 Elm St, Town",
+  "phone_number": "9876543210",
+  "email": "jane@example.com",
+  "hashed_password": "newPassword",
+  "reward_requested": "false"
+}
+
+###
+### Update an existing user's wallet
+###
+
+PATCH http://localhost:8000/api/v1/users/11/wallet
+Content-Type: application/json
+
+{
+  "wallet_address": "0x97d86d0a70760111f94c912ec08c76cd5d9158dd"
+}
+
+###
+### Delete a user
+###
+
+DELETE http://localhost:8000/api/v1/users/2
+
+###
+### Login and receive a JWT Bearer Token
+###
+
+POST http://localhost:8000/api/v1/login/
+Content-Type: application/json
+
+{
+  "email": "jane@example.com",
+  "password": "newPassword"
+}
+
+###
+### Get the current user
+###
+# first use the endpoint test for /token/ to receive a token, then add the token after "Bearer", like below
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzExNTM5MTM2fQ.8qKvSNCf7xx2v8tqAxiTMRkiim03jlRaz4r4llwskrA
+GET http://localhost:8000/api/v1/users/me/
+Authorization: Bearer # remove this comment and add your bearer token in its place
+
+#########################################################
+### Endpoints tests for water saving measure requests ###
+#########################################################
+
+###
+### Get all requests
+###
+
+GET http://localhost:8000/api/v1/requests
+
+###
+### Get requests by user ID
+###
+
+GET http://localhost:8000/api/v1/users/1/requests
+
+###
+### Get requests by agent ID
+###
+
+GET http://localhost:8000/api/v1/agents/1/requests
+
+###
+### Get a request by request ID
+###
+
+GET http://localhost:8000/api/v1/requests/1
+
+###
+### Create a new request
+###
+
+POST http://localhost:8000/api/v1/requests/
+Content-Type: application/json
+
+{
+    "user_id": 2,
+    "user_address": "456 Side St, Town",
+    "measures": [
+      {
+        "measure_type": "Rain Barrel",
+        "measure_value": "100"
+      },
+      {
+        "measure_type": "Rain Barrel",
+        "measure_value": "250"
+      }
+    ],
+    "approval_status": "Pending",
+    "rejection_reason": "",
+    "date_requested": "2024-04-05T12:00:00",
+    "installation_type": "technician",
+    "image_hashes": [
+      "hash1",
+      "hash2"
+    ],
+    "agent_id": 1
+}
+
+###
+### Update an existing request
+###
+
+PUT http://localhost:8000/api/v1/requests/1
+Content-Type: application/json
+
+{
+    "user_id": 2,
+    "user_address": "456 Otherside St, Town",
+    "measures": [
+      {
+        "measure_type": "Rain Barrel",
+        "measure_value": "100L"
+      },
+      {
+        "measure_type": "Rain Barrel",
+        "measure_value": "250L"
+      }
+    ],
+    "approval_status": "Pending",
+    "rejection_reason": "",
+    "date_requested": "2024-04-05T12:00:00",
+    "installation_type": "technician",
+    "image_hashes": [
+      "hash1",
+      "hash2"
+    ],
+    "agent_id": 1
+}
+
+###
+### Delete a request
+###
+
+DELETE http://localhost:8000/api/v1/requests/1
+
+
+###
+### Approve a request
+###
+
+PATCH http://localhost:8000/api/v1/requests/1
+Content-Type: application/json
+
+{
+  "approval_status": "Approved"
+}
+
+###
+### Reject a request with a reason included
+###
+
+PATCH http://localhost:8000/api/v1/requests/2
+Content-Type: application/json
+
+{
+  "approval_status": "Rejected",
+  "rejection_reason": "The requested measure does not match the details given in the request, incorrect barrel size"
+}
